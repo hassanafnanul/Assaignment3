@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include<string.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+}
+
+
+main()
+{
+    char name[100], vertexes[100] = "";
+    int i = 0, j = 0, NumberOfVertexes = -1;
+    char yORn;
+    int matrix[100][100];
+    
+    
+    printf("Enter Your Name:  ");
+    gets(name);
+    
+    for(i = 0; name[i] != '\0'; i++)
+    {
+        for(j=0; vertexes[j] != '\0' && name[i] != ' '; j++)
+        {
+            if(name[i] == vertexes[j])
+            {
+                break;
+            }
+            else
+            {
+                continue;
+            }
+            
+        }
+        if(j>NumberOfVertexes)
+        {
+            vertexes[++NumberOfVertexes] = name[i];
+        }
+    }
+    
+    struct node *heads[NumberOfVertexes+1];
+    struct node *head = NULL;
+    
+    
+    for(i=0; vertexes[i] != '\0' && i<=j; i++)
+    {
+        for(j=0; vertexes[j] != '\0'; j++)
+        {
+            printf("\n\nIs there any connection Between %c & %c (y/n): ", vertexes[i], vertexes[j]);
+            scanf("%c", &yORn);
+            getchar();
+            if(yORn == 'y' || yORn == 'Y')
+            {
+                matrix[i][j] = 1;
+             //   matrix[j][i] = 1;
+            }
+            else
+            {
+                matrix[i][j] = 0;
+              //  matrix[j][i] = 0;
+            }
+        }
+    }
+    
+    printf("\n\nAdjutency Matrix:   \n\n   ");
+    
+    for(i=0;i<=NumberOfVertexes;i++)
+    {
+        printf("%c  ", vertexes[i]);
+    }
+    printf("\n   ");
+    for(i=0;i<=NumberOfVertexes;i++)
+    {
+        printf("-  ");
+    }
+    printf("\n");
+    
+    for(i=0; vertexes[i] != '\0'; i++)
+    {
+        printf("%c| ", vertexes[i]);
+        for(j=0; vertexes[j] != '\0'; j++)
+        {
+            printf("%d  ", matrix[i][j]);
+        }
+        printf("\n\n");
+    }
+    
+    
+    for(i = 0; i<=NumberOfVertexes; i++)
+    {
+        head = (struct node *)malloc(sizeof(struct node));
+        heads[i] = head;
+        int isFirst = 1;
+        struct node * LastNode = NULL;
+        for(j= 0 ; j<=NumberOfVertexes; j++)
+        {
+            if(matrix[i][j] == 1 && isFirst == 1)
+            {
+                head->data = vertexes[j];
+                head->next = NULL;
+                isFirst = 0;
+                LastNode = head;
+            }
+            
+            if(matrix[i][j] == 1 && isFirst == 0)
+            {
+                struct node* listNode = (struct node *)malloc(sizeof(struct node));
+                LastNode->next = listNode;
+                listNode->data = vertexes[i];
+                listNode->next = NULL;
+                isFirst = 0;
+                LastNode = listNode;
+            }
+        }
+    }
+    
+    printf("\n\nAdjutency List:  \n\n");
+    struct node * printNode;
+    for(i = 0; i<=NumberOfVertexes; i++)
+    {
+        printNode = heads[i];
+        printf(" %c", vertexes[i]);
+        
+        while(printNode->next != NULL)
+        {
+            printf(" -> %c ", printNode->data);
+            printNode = printNode->next;
+        }
+        
+        printf("\n\n");
+    }
+}
